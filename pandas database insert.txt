@@ -1,0 +1,51 @@
+import pandas as pd
+import numpy as np
+import MySQLdb as db
+import pandas as pd
+db = db.connect(host="127.0.0.1",
+                user="root",
+                passwd="root",
+                db="breastcancer"
+                )
+Cursor = db.cursor()
+data = pd.read_csv('breast-cancer-wisconsin.data.txt')
+#
+# print(data.head())
+# print((data[[6]] == '?').sum())
+
+data['bare_nuclei']=pd.to_numeric(pd.Series(data['bare_nuclei']),errors='coerce')
+
+# print(data['bare_nuclei'])
+
+data['bare_nuclei'].fillna(np.nanmean(data['bare_nuclei'].values), inplace=True)
+
+# print(data.isnull().sum())
+print(data.info())
+
+
+
+id=data["id"].tolist()
+clump_thickness=data["clump_thickness"].tolist()
+unif_cell_size=data["unif_cell_size"].tolist()
+unif_cell_shape=data["unif_cell_shape"].tolist()
+marg_adhesion=data["marg_adhesion"].tolist()
+single_epith_cell_size=data["single_epith_cell_size"].tolist()
+bare_nuclei=data["bare_nuclei"].tolist()
+bland_chrom=data["bland_chrom"].tolist()
+norm_nucleoli=data["norm_nucleoli"].tolist()
+mitoses=data["mitoses"].tolist()
+class1=data["class"].tolist()
+# # new_price=list(map(str,price))
+
+
+for i ,j in enumerate(id):
+#     # all_data = """INSERT INTO breast_cancer VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""", (
+#     # j, clump_thickness[i], unif_cell_size[i], marg_adhesion[i], single_epith_cell_size[i], bare_nuclei[i],
+#     # bland_chrom[i], norm_nucleoli[i], mitoses[i], class1[i])
+#     # print(all_data)
+#
+#
+    v=Cursor.execute("""INSERT INTO breast_cancer VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",(j,clump_thickness[i],unif_cell_size[i],unif_cell_shape[i],marg_adhesion[i],single_epith_cell_size[i],bare_nuclei[i],bland_chrom[i],norm_nucleoli[i],mitoses[i],class1[i]))
+    print(v)
+db.commit()
+db.close()
